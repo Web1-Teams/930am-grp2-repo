@@ -1,0 +1,105 @@
+/*Additional css styles*/
+
+    .checkout-button {
+    width: 100%;
+    color: white;
+    background-color: #1c74fc; 
+    border: none;
+    border-radius: 0.3rem;
+    transition: 0.4s;
+
+    }
+  
+    .checkout-button:hover, .cart-button:hover,.quantity-button:hover {
+    background-color: #0056b3; 
+    }
+
+    .cart-button {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: white;
+    background-color: #1c74fc;
+    border: none;
+    border-radius: 0.3rem;
+    transition: 0.4s;
+    }
+
+    .quantity-button{
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 1rem;
+    color: white;
+    background-color: #1c74fc;
+    border: none;
+    border-radius: 1rem;
+    transition: 0.4s;
+    }
+
+    @media only screen and (min-width: 1200px) {
+    .checkout-button {
+        font-size: 1.5rem;
+        padding: 1rem;
+    }
+
+    .quantity-button{
+        width:30%;
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .cart-button {
+        font-size: 1.5rem;
+
+    }
+ 
+    }/*For desktops*/
+    
+    @media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .checkout-button {
+        font-size: 1.25rem;
+        padding: 0.875rem;
+    }
+
+    .quantity-button{
+        width:30%;
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .cart-button {
+        font-size: 1.5rem;
+
+    }
+    }/*For laptops*/
+
+    @media only screen and (min-width:768px) and (max-width:991px){
+    .checkout-button {
+        font-size: 1.25rem;
+        padding: 0.875rem;
+    }
+
+    .quantity-button{
+        width:25%;
+    }
+    
+    }/*For tables*/  
+
+    @media only screen and (max-width: 767px) {
+    .checkout-button {
+        font-size: 1rem;
+        padding: 0.625rem;
+    }
+    .quantity-button{
+        width:1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    }/*For smaller screens*/
+  
+
+
