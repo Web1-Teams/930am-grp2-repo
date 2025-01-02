@@ -62,19 +62,19 @@ const Cart = () => {
   const myItems = () => {
     if(cartItems.length!==0)
       return cartItems.map((item, index) => (
-      <tr className="tableRow" key={item.id}>
-        <td className="tableCell"> <img className="cart-img" src={item.image} alt={item.title} /> </td>
-        <td className="tableCell">{item.title}</td>
-        <td className="tableCell">₪{parseInt(item.price)}</td>
-        <td className="tableCell">
+      <tr key={item.id}>
+        <td> <img className="cart-img" src={item.image} alt={item.title} /> </td>
+        <td>{item.title}</td>
+        <td>₪{parseInt(item.price)}</td>
+        <td>
           <div className="quantity-modifier">
             <Button className="quantity-button" myFunction={() => updateQuantity(index, parseInt(item.bag) - 1)} name="-"/>
             <input value={item.bag} onChange={(e) => updateQuantity(index, parseInt(e.target.value) || 1)} type="text" className="cart-input"/>
             <Button className="quantity-button" myFunction={() => updateQuantity(index, parseInt(item.bag) + 1)} name="+"/>
           </div>
         </td>
-        <td className="tableCell">₪{parseInt(item.price) * parseInt(item.bag)}</td>
-        <td className="tableCell"><FontAwesomeIcon icon={faTrash} onClick={() => removeItem(index)} className="cart-icon"/></td>
+        <td>₪{parseInt(item.price) * parseInt(item.bag)}</td>
+        <td><FontAwesomeIcon icon={faTrash} onClick={() => removeItem(index)} className="cart-icon"/></td>
       </tr>
       )
     );
@@ -86,12 +86,12 @@ return (
       <table className="cart-table">
         <thead>
           <tr>
-            <th className="tableCell" scope="col">Item</th>
-            <th className="tableCell" scope="col">Name</th>
-            <th className="tableCell" scope="col">Price</th>
-            <th className="tableCell" scope="col">Quantity</th>
-            <th className="tableCell" scope="col">Total</th>
-            <th className="tableCell" scope="col">Remove</th>
+            <th scope="col">Item</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Remove</th>
           </tr>
         </thead>
         <tbody>{myItems()}</tbody>

@@ -4,7 +4,6 @@ import CheckoutForm from './components/checkoutform/CheckoutForm';
 function App() {
   return (
   <>  
-  <Cart/>
   </>
 
   );
