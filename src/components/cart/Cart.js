@@ -24,6 +24,7 @@ const Cart = () => {
         setCartItems(items);
       } catch (error) {
         console.error("Error fetching cart items:", error);
+        
       }
     };
     fetchCartItems();

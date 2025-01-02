@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import "./CheckoutForm.css"
-import ErrorMsg from '../checkoutform(error msg)/ErrorMsg';
 import Button from '../button/Button';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import {db} from '../firebase/Firebase';
-
+import Inputdiv from '../inputdiv/Inputdiv';
 //function
 
 const CheckoutForm = () => {
@@ -90,35 +89,18 @@ const CheckoutForm = () => {
   <div className="checkout-container" >
     <h1>Checkout Form</h1>  
     <form className="myForm" onSubmit={formSubmit}>
+      <Inputdiv type="email" name="email" placeholder='Email Address' changeFucntion={handleChange} msgvalue={Errors.email}/>
 
-      <div className="mb-3">
-        <input type="email" className="form-control" id="InputEmail1" name="email" aria-describedby="emailHelp" placeholder='Email Address' onChange={handleChange}/>
-        <ErrorMsg className="error-msg" value={Errors.email}/>
-      </div>
+      <Inputdiv type="text" placeholder='First Name' changeFucntion={handleChange} msgvalue={Errors.firstName}/>
 
-      <div className="mb-3">
-        <input type="text" className="form-control" id="InputFirst-Name"  name="firstName" placeholder='First Name' onChange={handleChange}/>
-        <ErrorMsg className="error-msg" value={Errors.firstName}/>
-      </div>
+      <Inputdiv type="text" placeholder='Last Name' changeFucntion={handleChange} msgvalue={Errors.lastName}/>
 
-      <div className="mb-3">
-        <input type="text" className="form-control" id="InputLast-Name" name="lastName" placeholder='Last Name' onChange={handleChange}/>
-        <ErrorMsg className="error-msg" value={Errors.lastName}/>
-      </div>
+      <Inputdiv type="text" placeholder='City' changeFucntion={handleChange} msgvalue={Errors.city}/>
 
-      <div className="mb-3">
-        <input type="text" className="form-control" id="InputCity" name="city" placeholder='City' onChange={handleChange}/>
-        <ErrorMsg className="error-msg" value={Errors.city}/>
-      </div>
+      <Inputdiv type="text" placeholder='Zip Code' changeFucntion={handleChange} msgvalue={Errors.zipCode}/>
+      
+      <Inputdiv type="text" placeholder='Additional Notes (Optional)'/>
 
-      <div className="mb-3">
-        <input type="text" className="form-control" id="InputZip" name="zipCode" placeholder='Zip Code' onChange={handleChange}/>
-        <ErrorMsg className="error-msg" value={Errors.zipCode}/>
-      </div>
-
-      <div className="mb-3">
-        <input type="text" className="form-control" id="InputNotes" name="notes" placeholder='Additional Notes (Optional)' onChange={handleChange} />
-      </div>
       <Button className="checkout-button" type="sumbit" name="submit"/>
 
     </form>
