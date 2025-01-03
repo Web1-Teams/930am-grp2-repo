@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { db } from "./firebase";
+import { db } from "../marah/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import Card from "./Card";
-import NavBar from "./NavBar";
-
+import Card from "../marah/Card";
+import BrandsCarousel from './IntroSection'
+import BrandsCarousels from './BestSellerProducts'
+import Brands from './BrandsCarousel'
+import Navi from './Navbar'
 const Home = () => {
     const [items, setItems] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -12,14 +14,13 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch items
+        
                 const itemsSnapshot = await getDocs(collection(db, "items"));
                 const itemsData = itemsSnapshot.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
                 }));
 
-                // Fetch categories
                 const categoriesSnapshot = await getDocs(collection(db, "categories"));
                 const categoriesData = categoriesSnapshot.docs.map((doc) => ({
                     id: doc.id,
@@ -38,10 +39,9 @@ const Home = () => {
 
     return (
         <div>
-            <NavBar />
+            <Navi/>
             <div className="container mt-5">
-                {/* Categories Section */}
-
+                <BrandsCarousel/>
                 <div className="row mb-5">
                     {categories.map((category) => (
                         <div key={category.id} className="col-lg-2 col-md-4 col-sm-3 col-12 mb-4">
@@ -61,8 +61,7 @@ const Home = () => {
                         </div>
                     ))}
                 </div>
-
-                {/* Items Section */}
+<BrandsCarousels/>
                 <h2 className="mb-4">Items</h2>
                 <div className="row">
                     {items.map((item) => (
@@ -77,6 +76,7 @@ const Home = () => {
                         </div>
                     ))}
                 </div>
+                <Brands/>
             </div>
         </div>
     );

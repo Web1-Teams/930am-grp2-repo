@@ -19,6 +19,7 @@ const AddItems = () => {
         category: "Creatine",
         rating: 1,
         quantity: 1,
+        isBestSeller: false,
     });
 
     const [categoryData, setCategoryData] = useState({
@@ -32,7 +33,6 @@ const AddItems = () => {
     const [editItemId, setEditItemId] = useState(null);
     const [filterCategory, setFilterCategory] = useState("All");
 
-    // Fetch items and categories from Firestore
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -42,6 +42,7 @@ const AddItems = () => {
                 const itemsData = itemsSnapshot.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
+                    isBestSeller: doc.data().isBestSeller || false,
                 }));
 
                 const categoriesData = categoriesSnapshot.docs.map((doc) => ({
@@ -61,7 +62,7 @@ const AddItems = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData({ ...formData, [name]: name === "isBestSeller" ? value === "true" : value });
     };
 
     const handleCategoryChange = (e) => {
@@ -71,52 +72,25 @@ const AddItems = () => {
 
     const handleAddItem = async (e) => {
         e.preventDefault();
-        if (editMode) {
-            // Update item
-            try {
+        try {
+            if (editMode) {
                 const itemDoc = doc(db, "items", editItemId);
                 await updateDoc(itemDoc, formData);
                 alert("Item updated successfully!");
-                setEditMode(false);
-                setEditItemId(null);
-                setFormData({
-                    title: "",
-                    description: "",
-                    price: "",
-                    image: "",
-                    category: "Creatine",
-                    rating: 1,
-                    quantity: 1,
-                });
-                // Refresh items
                 setItems((prev) =>
                     prev.map((item) =>
                         item.id === editItemId ? { ...item, ...formData } : item
                     )
                 );
-            } catch (error) {
-                console.error("Error updating item: ", error);
-                alert("Failed to update item. Check console for details.");
-            }
-        } else {
-            // Add new item
-            try {
+            } else {
                 const docRef = await addDoc(collection(db, "items"), formData);
                 alert("Item added successfully!");
                 setItems([...items, { id: docRef.id, ...formData }]);
-                setFormData({
-                    title: "",
-                    description: "",
-                    price: "",
-                    image: "",
-                    category: "Creatine",
-                    rating: 1,
-                    quantity: 1,
-                });
-            } catch (error) {
-                console.error("Error adding item: ", error);
-                alert("Failed to add item. Check console for details.");
             }
+            resetForm();
+        } catch (error) {
+            console.error("Error adding/updating item: ", error);
+            alert("Failed to add/update item. Check console for details.");
         }
     };
 
@@ -147,23 +121,37 @@ const AddItems = () => {
         }
     };
 
+    const resetForm = () => {
+        setFormData({
+            title: "",
+            description: "",
+            price: "",
+            image: "",
+            category: "Creatine",
+            rating: 1,
+            quantity: 1,
+            isBestSeller: false,
+        });
+        setEditMode(false);
+        setEditItemId(null);
+    };
+
     const filteredItems =
         filterCategory === "All"
             ? items
-            : items.filter((item) => item.category === filterCategory);
+            : filterCategory === "BestSeller"
+                ? items.filter((item) => item.isBestSeller)
+                : items.filter((item) => item.category === filterCategory);
 
     return (
         <div className="d-flex">
             <Sidebar />
             <div className="container-fluid p-4 bg-dark text-white d-flex" style={{ flex: 1 }}>
-                {/* Left Section: Add Items and Display Items */}
                 <div className="w-75 pe-4">
                     <h1 className="mt-4">{editMode ? "Edit Item" : "Add Items"}</h1>
                     <form onSubmit={handleAddItem} className="mt-3">
                         <div className="mb-3">
-                            <label htmlFor="title" className="form-label">
-                                Title
-                            </label>
+                            <label htmlFor="title" className="form-label">Title</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -175,9 +163,7 @@ const AddItems = () => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="description" className="form-label">
-                                Description
-                            </label>
+                            <label htmlFor="description" className="form-label">Description</label>
                             <textarea
                                 className="form-control"
                                 id="description"
@@ -188,9 +174,7 @@ const AddItems = () => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="price" className="form-label">
-                                Price
-                            </label>
+                            <label htmlFor="price" className="form-label">Price</label>
                             <input
                                 type="number"
                                 className="form-control"
@@ -202,9 +186,7 @@ const AddItems = () => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="quantity" className="form-label">
-                                Quantity
-                            </label>
+                            <label htmlFor="quantity" className="form-label">Quantity</label>
                             <input
                                 type="number"
                                 className="form-control"
@@ -216,9 +198,7 @@ const AddItems = () => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="rating" className="form-label">
-                                Rating
-                            </label>
+                            <label htmlFor="rating" className="form-label">Rating</label>
                             <select
                                 className="form-control"
                                 id="rating"
@@ -235,9 +215,7 @@ const AddItems = () => {
                             </select>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="image" className="form-label">
-                                Image URL
-                            </label>
+                            <label htmlFor="image" className="form-label">Image URL</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -249,9 +227,7 @@ const AddItems = () => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="category" className="form-label">
-                                Category
-                            </label>
+                            <label htmlFor="category" className="form-label">Category</label>
                             <select
                                 className="form-control"
                                 id="category"
@@ -267,15 +243,27 @@ const AddItems = () => {
                                 ))}
                             </select>
                         </div>
+                        <div className="mb-3">
+                            <label htmlFor="isBestSeller" className="form-label">Is Best Seller</label>
+                            <select
+                                className="form-control"
+                                id="isBestSeller"
+                                name="isBestSeller"
+                                value={formData.isBestSeller}
+                                onChange={handleInputChange}
+                                required
+                            >
+                                <option value={false}>No</option>
+                                <option value={true}>Yes</option>
+                            </select>
+                        </div>
                         <button type="submit" className="btn btn-primary">
                             {editMode ? "Update Item" : "Add Item"}
                         </button>
                     </form>
                     <h2 className="mt-5">Items</h2>
                     <div className="mb-3">
-                        <label htmlFor="filterCategory" className="form-label">
-                            Filter by Category
-                        </label>
+                        <label htmlFor="filterCategory" className="form-label">Filter by Category</label>
                         <select
                             className="form-control"
                             id="filterCategory"
@@ -283,6 +271,7 @@ const AddItems = () => {
                             onChange={(e) => setFilterCategory(e.target.value)}
                         >
                             <option value="All">All</option>
+                            <option value="BestSeller">Best Sellers</option>
                             {categories.map((category) => (
                                 <option key={category.id} value={category.name}>
                                     {category.name}
@@ -303,17 +292,12 @@ const AddItems = () => {
                                     <div className="card-body">
                                         <h5 className="card-title text-center">{item.title}</h5>
                                         <p className="card-text text-center">{item.description}</p>
+                                        <p className="card-text text-center">Price: {item.price}$$</p>
+                                        <p className="card-text text-center">Quantity: {item.quantity}</p>
+                                        <p className="card-text text-center">Rating: {item.rating} / 5</p>
+                                        <p className="card-text text-center">Category: {item.category}</p>
                                         <p className="card-text text-center">
-                                            Price: {item.price}$$
-                                        </p>
-                                        <p className="card-text text-center">
-                                            Quantity: {item.quantity}
-                                        </p>
-                                        <p className="card-text text-center">
-                                            Rating: {item.rating} / 5
-                                        </p>
-                                        <p className="card-text text-center">
-                                            Category: {item.category}
+                                            Best Seller: {item.isBestSeller ? "Yes" : "No"}
                                         </p>
                                         <div className="d-flex justify-content-between">
                                             <button
@@ -340,14 +324,11 @@ const AddItems = () => {
                     </div>
                 </div>
 
-                {/* Right Section: Add Categories and Display Categories */}
                 <div className="w-25">
                     <h1 className="mt-4">Add Categories</h1>
                     <form onSubmit={handleAddCategory} className="mt-3">
                         <div className="mb-3">
-                            <label htmlFor="name" className="form-label">
-                                Category Name
-                            </label>
+                            <label htmlFor="name" className="form-label">Category Name</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -359,9 +340,7 @@ const AddItems = () => {
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="image" className="form-label">
-                                Image URL
-                            </label>
+                            <label htmlFor="image" className="form-label">Image URL</label>
                             <input
                                 type="text"
                                 className="form-control"

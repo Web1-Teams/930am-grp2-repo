@@ -7,7 +7,6 @@ const Sidebar = () => {
             className="d-flex flex-column flex-shrink-0 p-3 bg-dark"
             style={{ width: "280px", height: "auto", color: "white" }}
         >
-            {/* Sidebar Header */}
             <Navbar.Brand
                 href="/"
                 className="d-flex align-items-center mt-0 mb-md-0 me-md-auto link-light text-decoration-none"
@@ -19,7 +18,6 @@ const Sidebar = () => {
             </Navbar.Brand>
             <hr />
 
-            {/* Navigation Links */}
             <Nav className="flex-column mb-auto nav-pills">
                 <Nav.Item className="nav-item">
                     <Nav.Link href="/" className="active text-white">
@@ -64,7 +62,6 @@ const Sidebar = () => {
             </Nav>
             <hr />
 
-            {/* Dropdown Profile Section */}
             <Dropdown>
                 <Dropdown.Toggle
                     as={Button}

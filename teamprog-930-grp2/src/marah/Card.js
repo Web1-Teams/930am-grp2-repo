@@ -27,27 +27,26 @@ const Card = ({ title, description, price, image, rating}) => {
           className="card overflow-hidden mt-1 mb-1 p-0 bigcard Translate-middle mx-auto hover-zoom"
           style={{ width: "18rem", height: "auto" }}
       >
-        {/* Card Image */}
+        
         <img
             src={image || "https://via.placeholder.com/150"}
             className="card-img-top"
             alt={title || "Card image"}
-            style={{ objectFit: "cover", height: "180px", width: "100%" }} // Ensures image fills the card
+            style={{ objectFit: "cover", height: "180px", width: "100%" }}
         />
 
-        {/* Card Body */}
+       
         <div className="card-body card1 text-center">
           <h5 className="card-title">{title || "Card Title"}</h5>
           <p className="card-text">{description || "No description provided."}</p>
-          {/* Display Rating */}
+          
           <div className="rate d-flex justify-content-center align-items-center">
             <Ratings rating={rating || 2} />
-            <span className="ms-2">({rating || 2} / 5)</span> {/* Show numeric rating */}
+            <span className="ms-2">({rating || 2} / 5)</span> 
           </div>
 
           <p className="Price">{price ? `${price}$$` : "Price not available"}</p>
 
-          {/* Add to Cart Button */}
           <button
               className="btn btn-dark w-100 mt-3"
               onClick={handleAddToCart}
