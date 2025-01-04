@@ -121,6 +121,17 @@ const AddItems = () => {
         }
     };
 
+    const handleDeleteCategory = async (id) => {
+        try {
+            await deleteDoc(doc(db, "categories", id));
+            alert("Category deleted successfully!");
+            setCategories(categories.filter((category) => category.id !== id));
+        } catch (error) {
+            console.error("Error deleting category: ", error);
+            alert("Failed to delete category. Check console for details.");
+        }
+    };
+
     const resetForm = () => {
         setFormData({
             title: "",
@@ -370,9 +381,7 @@ const AddItems = () => {
                                         <h5 className="card-title">{category.name}</h5>
                                         <button
                                             className="btn btn-danger btn-sm"
-                                            onClick={() =>
-                                                setCategories(categories.filter((cat) => cat.id !== category.id))
-                                            }
+                                            onClick={() => handleDeleteCategory(category.id)}
                                         >
                                             Delete
                                         </button>
